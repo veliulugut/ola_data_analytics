@@ -47,13 +47,14 @@ I chose JetBrains DataGrip as our database IDE because it offers:
 1. Clone or download the repository:
 ```bash
 git clone https://github.com/veliulugut/ola_data_analytics.git
-
+```
+```
 cd ola_data_analytics
 ```
 
 2. Start the Docker containers:
 ```bash
-docker-compose up -d
+docker compose up --build
 ```
 
 3. The database will be automatically initialized with the schema and views defined in `init.sql`
@@ -98,6 +99,71 @@ GROUP BY Customer_ID
 ORDER BY total_rides DESC LIMIT 5;
 ```
 Identifies the most active customers on the platform.
+
+### 4. Cancellation Analysis 🚫
+```sql
+CREATE VIEW Cancelled_Rides_By_Customers AS
+SELECT COUNT(*) 
+FROM bookings
+WHERE Booking_Status = 'Canceled by Customer';
+```
+Tracks customer-initiated cancellations to understand cancellation patterns.
+
+### 5. Driver Issues Tracking 🔍
+```sql
+CREATE VIEW Rides_Cancelled_By_Drivers_Issues AS
+SELECT COUNT(*) 
+FROM bookings
+WHERE cancelled_Rides_by_Driver = 'Personal & Car related issue';
+```
+Monitors service disruptions due to driver and vehicle-related issues.
+
+### 6. Vehicle Rating Analysis ⭐
+```sql
+CREATE VIEW Max_Min_Driver_Rating AS
+SELECT MAX(Driver_Ratings) as max_rating,
+MIN(Driver_Ratings) as min_rating
+FROM bookings 
+WHERE Vehicle_Type = 'Prime Sedan';
+```
+Evaluates driver performance specifically for Premium Sedan service.
+
+### 7. Payment Preferences 💳
+```sql
+CREATE VIEW UPI_Payment AS
+SELECT * 
+FROM bookings
+WHERE Payment_Method = 'UPI';
+```
+Analyzes digital payment adoption through UPI.
+
+### 8. Vehicle Service Quality 🚘
+```sql
+CREATE VIEW AVG_Cust_Rating AS
+SELECT Vehicle_Type, 
+AVG(Customer_Rating) as avg_customer_rating
+FROM bookings
+GROUP BY Vehicle_Type;
+```
+Measures customer satisfaction across different vehicle categories.
+
+### 9. Revenue Analysis 💰
+```sql
+CREATE VIEW total_successful_ride_value AS
+SELECT SUM(Booking_Value) as total_successful_ride_value
+FROM bookings
+WHERE Booking_Status = 'Success';
+```
+Tracks total revenue from successful bookings.
+
+### 10. Service Issue Investigation 🔎
+```sql
+CREATE VIEW Incomplete_Rides_Reason AS
+SELECT Booking_ID, Incomplete_Rides_Reason
+FROM bookings
+WHERE Incomplete_Rides = 'Yes';
+```
+Helps identify and analyze reasons for incomplete rides.
 
 ## 📈 Results and Insights
 - Track successful vs. cancelled bookings
@@ -157,7 +223,8 @@ JetBrains DataGrip'i veritabanı IDE'si olarak seçtim çünkü:
 1. Depoyu klonlayın veya indirin:
 ```bash
 git clone https://github.com/veliulugut/ola_data_analytics.git
-
+```
+```
 cd ola_data_analytics
 ```
 
@@ -208,6 +275,71 @@ GROUP BY Customer_ID
 ORDER BY total_rides DESC LIMIT 5;
 ```
 Platformdaki en aktif müşterileri belirler.
+
+### 4. İptal Analizi 🚫
+```sql
+CREATE VIEW Cancelled_Rides_By_Customers AS
+SELECT COUNT(*) 
+FROM bookings
+WHERE Booking_Status = 'Canceled by Customer';
+```
+Müşteri kaynaklı iptalleri takip ederek iptal kalıplarını anlar.
+
+### 5. Sürücü Sorunları Takibi 🔍
+```sql
+CREATE VIEW Rides_Cancelled_By_Drivers_Issues AS
+SELECT COUNT(*) 
+FROM bookings
+WHERE cancelled_Rides_by_Driver = 'Personal & Car related issue';
+```
+Sürücü ve araç kaynaklı hizmet aksaklıklarını izler.
+
+### 6. Araç Değerlendirme Analizi ⭐
+```sql
+CREATE VIEW Max_Min_Driver_Rating AS
+SELECT MAX(Driver_Ratings) as max_rating,
+MIN(Driver_Ratings) as min_rating
+FROM bookings 
+WHERE Vehicle_Type = 'Prime Sedan';
+```
+Özellikle Premium Sedan hizmeti için sürücü performansını değerlendirir.
+
+### 7. Ödeme Tercihleri 💳
+```sql
+CREATE VIEW UPI_Payment AS
+SELECT * 
+FROM bookings
+WHERE Payment_Method = 'UPI';
+```
+UPI üzerinden dijital ödeme adaptasyonunu analiz eder.
+
+### 8. Araç Hizmet Kalitesi 🚘
+```sql
+CREATE VIEW AVG_Cust_Rating AS
+SELECT Vehicle_Type, 
+AVG(Customer_Rating) as avg_customer_rating
+FROM bookings
+GROUP BY Vehicle_Type;
+```
+Farklı araç kategorilerinde müşteri memnuniyetini ölçer.
+
+### 9. Gelir Analizi 💰
+```sql
+CREATE VIEW total_successful_ride_value AS
+SELECT SUM(Booking_Value) as total_successful_ride_value
+FROM bookings
+WHERE Booking_Status = 'Success';
+```
+Başarılı rezervasyonlardan elde edilen toplam geliri takip eder.
+
+### 10. Hizmet Sorunu İncelemesi 🔎
+```sql
+CREATE VIEW Incomplete_Rides_Reason AS
+SELECT Booking_ID, Incomplete_Rides_Reason
+FROM bookings
+WHERE Incomplete_Rides = 'Yes';
+```
+Tamamlanmayan yolculukların nedenlerini belirlemeye ve analiz etmeye yardımcı olur.
 
 ## 📈 Sonuçlar ve İçgörüler
 - Başarılı ve iptal edilen rezervasyonların takibi
