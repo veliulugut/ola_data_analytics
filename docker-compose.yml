@@ -3,10 +3,11 @@
 services:
   mysql:
     image: mysql
-    container_name: mysql-container
+    container_name: ola_data_analysis_mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: bookingdb
+      MYSQL_DATABASE: oladb
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     ports:
